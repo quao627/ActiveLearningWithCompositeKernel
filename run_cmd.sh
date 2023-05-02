@@ -1,0 +1,1 @@
+python al_experiments.py --simulator motorcycle --seed 1 --active_learning_steps 40 --metamodel_name "motorcycle_mcmc_gmm_1_40" --selection_criteria mcmc_gmm

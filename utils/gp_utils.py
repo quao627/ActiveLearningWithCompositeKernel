@@ -90,6 +90,20 @@ def get_loss(args, model, num_data):
     mll = gpytorch.mlls.ExactMarginalLogLikelihood(model.pred_model.likelihood, model.pred_model)
     return mll
 
+# Ao's code
+def get_loss_deep_kernel(args, model, num_data):
+    """
+    Returns the loss
+
+    :param args: arguments
+    :param model: model
+    :param num_data: number of data points in the training set
+    :returns: loss function used to train model
+    """
+    # Define loss ("Loss" for GPs - the marginal log likelihood)
+    mll = gpytorch.mlls.ExactMarginalLogLikelihood(model.likelihood, model)
+    return mll
+
 
 def compute_loss(args, dataloader, predictions, lst_metrics=[], mll=None):
     """

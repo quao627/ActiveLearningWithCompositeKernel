@@ -11,7 +11,7 @@ class Dataset:
 
 
 class MyDataLoader:
-    def __init__(self, args, oracle):
+    def __init__(self, args, oracle, device):
         self.args = args
         self.oracle = oracle
         self.pool_labeled = None
@@ -38,6 +38,8 @@ class MyDataLoader:
         self.x_mu, self.x_sigma = None, None
         self.y_mu, self.y_sigma = None, None
 
+        self.device = device
+
     def get_initial_data(self, seed=None):
         self.search_space = self.oracle.search_space()
         train_x, train_y = self.oracle.sample_initial_data(n_samples=self.args.initial_samples,
@@ -46,13 +48,19 @@ class MyDataLoader:
         test_x, test_y = self.oracle.sample_initial_data(n_samples=self.args.test_samples,
                                                          space_filling_design="random",
                                                          seed=seed)
+        
+        # Ao's code
+        train_x = train_x.to(self.device)
+        train_y = train_y.to(self.device)
+        test_x = test_x.to(self.device)
+        test_y = test_y.to(self.device)
 
         self.train = Dataset(train_x, train_y)
         self.test = Dataset(test_x, test_y)
 
     def compute_true_mean_and_stddev(self):
-        self.true_mean = torch.Tensor(self.oracle.mean(x=self.search_space))
-        self.true_std = torch.Tensor(self.oracle.stddev(x=self.search_space))
+        self.true_mean = torch.Tensor(self.oracle.mean(x=self.search_space)).to(self.device)
+        self.true_std = torch.Tensor(self.oracle.stddev(x=self.search_space)).to(self.device)
 
     def transform(self):
         train_x_trans, self.x_mu, self.x_sigma = transform(self.train.x, method=self.args.transformation_x)
@@ -62,6 +70,11 @@ class MyDataLoader:
 
         train_y_trans = train_y_trans.squeeze(-1)
         test_y_trans = test_y_trans.squeeze(-1)
+
+        train_x_trans = train_x_trans.to(self.device)
+        train_y_trans = train_y_trans.to(self.device)
+        test_x_trans = test_x_trans.to(self.device)
+        test_y_trans = test_y_trans.to(self.device)
 
         self.train_trans = Dataset(train_x_trans, train_y_trans)
         self.test_trans = Dataset(test_x_trans, test_y_trans)

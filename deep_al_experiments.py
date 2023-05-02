@@ -9,7 +9,9 @@ from utils.data_handler import MyDataLoader
 from simulators.simulator import oracle_simulator
 from utils.active_learning import apply_active_learning_strategy
 from utils.transformations import transform
-from utils.gp_utils import get_model, get_likelihood, get_loss, compute_loss
+from utils.gp_utils import get_model, get_likelihood, get_loss_deep_kernel, compute_loss
+
+from models.deepkernel import DeepKernelRegression
 
 import os
 os.environ["MKL_NUM_THREADS"] = "1"
@@ -24,13 +26,15 @@ os.chdir(dname)
 torch.set_num_threads(1)
 torch.set_num_interop_threads(1)
 
+# Set device
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def do_active_learning(args):
     if args.simulator is not None:
         oracle = oracle_simulator(args)
     else:
         oracle = None
-    data = MyDataLoader(args=args, oracle=oracle)
+    data = MyDataLoader(args=args, oracle=oracle, device=device)
     data.get_initial_data(seed=args.seed)
     data.compute_true_mean_and_stddev()
 
@@ -45,30 +49,29 @@ def do_active_learning(args):
         data.make_dataloader()
 
         # Fit model
-        model = get_model(args, data, likelihood=get_likelihood(args))
+        model = DeepKernelRegression(data.train_trans.x, data.train_trans.y, likelihood=get_likelihood(args).to(device)).to(device)
         nmll_loss, fit_losses, outs = model.fit(data.gp_train_loader, args)
         nmll_losses.append(nmll_loss)
 
-        # Validate with: marginal log likelihood (MLL)
+        # Validae with: marginal log likelihood (MLL)
         predict_output = model.predict(data.gp_test_loader)
         predictions_mll = predict_output['predictions']
 
         losses_valid = compute_loss(args, data.gp_test_loader, predictions_mll, lst_metrics=['mll'],
-                              mll=get_loss(args, model, num_data=data.train_trans.y.numel()))
+                              mll=get_loss_deep_kernel(args, model, num_data=data.train_trans.y.numel()))
         nmll_losses_valid.append(losses_valid['nmll'])
 
         # Make predictions on the search space
         data.get_candidate_points(seed=None)
-        pred_x_trans, _, _ = transform(torch.Tensor(data.candidate_points), data.x_mu, data.x_sigma,
+        pred_x_trans, _, _ = transform(torch.Tensor(data.candidate_points).to(device), data.x_mu, data.x_sigma,
                                        method=args.transformation_x)
         predict_output_querying = model.predict(dataloader=(pred_x_trans, None))
         predict_output = predict_output_querying
 
         # Transform pred_x, mean and standard deviation back
-        pred_x = transform(pred_x_trans, data.x_mu, data.x_sigma, method=args.transformation_x, inverse=True)
-        pred_mean = transform(predict_output['mean'], data.y_mu, data.y_sigma, method=args.transformation_y, inverse=True)
-        pred_std = transform(predict_output['stddev'], 0, data.y_sigma, method=args.transformation_y, inverse=True)
-        pred_std_f = transform(predict_output['stddev_f'], 0, data.y_sigma, method=args.transformation_y, inverse=True)
+        pred_x = transform(pred_x_trans, data.x_mu, data.x_sigma, method=args.transformation_x, inverse=True).to(device)
+        pred_mean = transform(predict_output['mean'], data.y_mu, data.y_sigma, method=args.transformation_y, inverse=True).to(device)
+        pred_std = transform(predict_output['stddev'], 0, data.y_sigma, method=args.transformation_y, inverse=True).to(device)
 
         # Compute loses
         losses = compute_loss(args, dataloader=(None, data.true_mean_cp), predictions=pred_mean,
@@ -81,9 +84,9 @@ def do_active_learning(args):
 
         # Compute sampling strategy (evaluate acqusition function)
         sample_strategy_output, selection_array, new_points, data = \
-            apply_active_learning_strategy(args, model, data, predict_output_querying, i)
+            apply_active_learning_strategy(args, model, data, predict_output_querying, i, device=device)
         
-        print(f"Iteration: {i}, new points: {losses['rmse']}")
+        print(f"Iteration: {i}, rmse loss: {losses['rmse']}")
 
     # Save things to file
     p_dct = {}

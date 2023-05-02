@@ -100,7 +100,7 @@ def get_sorted_unlabeled_data_points(args, selection_array, search_space):
     return new_points, new_points_index
 
 
-def compute_sample_strategy(args, model, data, predictions):
+def compute_sample_strategy(args, model, data, predictions, device):
     """
     Applies a sampling strategy/criteria and returns a tensor with a value for each point in the search space.
     All strategies are defined such that next point to query has the highest value, e.g. argmax(selection_array).
@@ -117,7 +117,7 @@ def compute_sample_strategy(args, model, data, predictions):
 
     variance = predictions['stddev']**2
 
-    ss_unique_trans, _, _ = transform(torch.Tensor(ss_unique), data.x_mu, data.x_sigma, method=args.transformation_x)
+    ss_unique_trans, _, _ = transform(torch.Tensor(ss_unique).to(device), data.x_mu, data.x_sigma, method=args.transformation_x)
 
     # Apply acquisition function
     torch.set_num_threads(args.num_chains)
@@ -138,8 +138,8 @@ def compute_sample_strategy(args, model, data, predictions):
     return output
 
 
-def apply_active_learning_strategy(args, model, data, predict_output_querying, i):
-    sample_strategy_output = compute_sample_strategy(args, model, data, predictions=predict_output_querying)
+def apply_active_learning_strategy(args, model, data, predict_output_querying, i, device):
+    sample_strategy_output = compute_sample_strategy(args, model, data, predictions=predict_output_querying, device=device)
     selection_array = sample_strategy_output['selection_array']
     new_points = sample_strategy_output['new_points']
 
