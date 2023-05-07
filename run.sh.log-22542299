@@ -1,0 +1,56 @@
+/var/spool/slurmd/job22542299/slurm_script: line 2: SBATCH: command not found
+/var/spool/slurmd/job22542299/slurm_script: line 3: SBATCH: command not found
+/var/spool/slurmd/job22542299/slurm_script: line 4: SBATCH: command not found
+/var/spool/slurmd/job22542299/slurm_script: line 5: SBATCH: command not found
+/home/gridsan/aoqu/.local/lib/python3.8/site-packages/linear_operator/utils/linear_cg.py:337: NumericalWarning: CG terminated in 1000 iterations with average residual norm 827.971923828125 which is larger than the tolerance of 1 specified by linear_operator.settings.cg_tolerance. If performance is affected, consider raising the maximum number of CG iterations by running code in a linear_operator.settings.max_cg_iterations(value) context.
+  warnings.warn(
+/home/gridsan/aoqu/.local/lib/python3.8/site-packages/linear_operator/utils/linear_cg.py:337: NumericalWarning: CG terminated in 1000 iterations with average residual norm 33.83430099487305 which is larger than the tolerance of 1 specified by linear_operator.settings.cg_tolerance. If performance is affected, consider raising the maximum number of CG iterations by running code in a linear_operator.settings.max_cg_iterations(value) context.
+  warnings.warn(
+/home/gridsan/aoqu/.local/lib/python3.8/site-packages/linear_operator/utils/linear_cg.py:337: NumericalWarning: CG terminated in 1000 iterations with average residual norm 629.3516235351562 which is larger than the tolerance of 1 specified by linear_operator.settings.cg_tolerance. If performance is affected, consider raising the maximum number of CG iterations by running code in a linear_operator.settings.max_cg_iterations(value) context.
+  warnings.warn(
+/home/gridsan/aoqu/.local/lib/python3.8/site-packages/linear_operator/utils/linear_cg.py:337: NumericalWarning: CG terminated in 1000 iterations with average residual norm 17879.890625 which is larger than the tolerance of 1 specified by linear_operator.settings.cg_tolerance. If performance is affected, consider raising the maximum number of CG iterations by running code in a linear_operator.settings.max_cg_iterations(value) context.
+  warnings.warn(
+/home/gridsan/aoqu/.local/lib/python3.8/site-packages/linear_operator/utils/linear_cg.py:337: NumericalWarning: CG terminated in 1000 iterations with average residual norm 29666.48828125 which is larger than the tolerance of 1 specified by linear_operator.settings.cg_tolerance. If performance is affected, consider raising the maximum number of CG iterations by running code in a linear_operator.settings.max_cg_iterations(value) context.
+  warnings.warn(
+[AL_toy_simulator.py] Starting active learning for: motorcycle_variance_1_40
+Iteration: 0, rmse loss: tensor([0.3078])
+Iteration: 1, rmse loss: tensor([0.7935])
+Iteration: 2, rmse loss: tensor([0.5076])
+Iteration: 3, rmse loss: tensor([0.3565])
+Iteration: 4, rmse loss: tensor([0.4733])
+Iteration: 5, rmse loss: tensor([0.2724])
+Iteration: 6, rmse loss: tensor([0.2741])
+Iteration: 7, rmse loss: tensor([0.4071])
+Iteration: 8, rmse loss: tensor([0.2772])
+Iteration: 9, rmse loss: tensor([0.2883])
+Iteration: 10, rmse loss: tensor([0.3305])
+Iteration: 11, rmse loss: tensor([0.3399])
+Iteration: 12, rmse loss: tensor([1.0238])
+Iteration: 13, rmse loss: tensor([0.3247])
+Iteration: 14, rmse loss: tensor([0.2886])
+Iteration: 15, rmse loss: tensor([0.3098])
+Iteration: 16, rmse loss: tensor([0.2523])
+Iteration: 17, rmse loss: tensor([0.2289])
+Iteration: 18, rmse loss: tensor([0.3513])
+Iteration: 19, rmse loss: tensor([0.2182])
+Iteration: 20, rmse loss: tensor([0.2301])
+Iteration: 21, rmse loss: tensor([0.2294])
+Iteration: 22, rmse loss: tensor([0.2310])
+Iteration: 23, rmse loss: tensor([0.4130])
+Iteration: 24, rmse loss: tensor([0.2643])
+Iteration: 25, rmse loss: tensor([0.2510])
+Iteration: 26, rmse loss: tensor([0.2298])
+Iteration: 27, rmse loss: tensor([0.2347])
+Iteration: 28, rmse loss: tensor([0.2220])
+Iteration: 29, rmse loss: tensor([0.2381])
+Iteration: 30, rmse loss: tensor([0.2305])
+Iteration: 31, rmse loss: tensor([0.2320])
+Iteration: 32, rmse loss: tensor([0.2309])
+Iteration: 33, rmse loss: tensor([0.3315])
+Iteration: 34, rmse loss: tensor([0.3130])
+Iteration: 35, rmse loss: tensor([0.3160])
+Iteration: 36, rmse loss: tensor([0.3096])
+Iteration: 37, rmse loss: tensor([0.3280])
+Iteration: 38, rmse loss: tensor([0.3253])
+Iteration: 39, rmse loss: tensor([0.3957])
+Wrote results to outputs/motorcycle_variance_1_40. The experiment took 2666.8357887268066 sec.

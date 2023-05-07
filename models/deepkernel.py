@@ -48,10 +48,10 @@ class DeepKernelRegression(gpytorch.models.ExactGP):
             self.likelihood.train()
 
             # Train the model using Adam optimizer
-            optimizer = torch.optim.Adam(self.parameters(), lr=0.1)
+            optimizer = torch.optim.Adam(self.parameters(), lr=0.05)
             mll = gpytorch.mlls.ExactMarginalLogLikelihood(self.likelihood, self)
 
-            training_iter = 500
+            training_iter = 800
             for i in range(training_iter):
                 optimizer.zero_grad()
                 output = self.forward(train_x)

@@ -11,7 +11,7 @@ class Dataset:
 
 
 class MyDataLoader:
-    def __init__(self, args, oracle, device):
+    def __init__(self, args, oracle, device='cpu'):
         self.args = args
         self.oracle = oracle
         self.pool_labeled = None
